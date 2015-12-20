@@ -1,0 +1,359 @@
+BOOT2C.COM & BOOTPW.COM (VERSION 1.0)   Copyright (c) 1993 Douglas Boling
+-------------------------------------------------------------------------
+                First Published in PC Magazine March 30, 1993 (Utilities)
+-------------------------------------------------------------------------
+
+BOOT2C & BOOTPW:
+                BOOT2C lets you force a boot from your hard disk even if
+you have left a floppy in a disk drive. BOOT2C does this not only for
+DOS-based PCs, but for machines that run under OS/2 as well. BOOTPW lets
+you password-protect a floppy or hard disk. Once protected, your disks
+won't be recognized as valid disks by either DOS or OS/2.
+
+
+     How often do you forget that you've left a floppy disk in drive
+A: when you boot up your PC?  Don't you wish that instead of giving you
+an annoying ``Non-System disk or disk error'' message and making you
+unlock drive A:, your machine would simply go to drive C: and boot up
+from there directly?
+
+    BOOT2C, eliminates the forgotten-disk syndrome.  By installing a tiny
+bit of code in the boot sector of the drive A: floppy disk, BOOT2C
+automatically forces the machine to load the operating system files from
+the hard disk.  BOOT2C does this not only for DOS-based PCs, but for
+machines that run under OS/2 as well.
+
+    Indeed, with a BOOT2C-modified disk in drive A:, your machine will
+actually boot faster.  That's because your PC won't receive and process
+an error when it attempts to read the A: drive.  Normally, a PC retries
+its initial floppy disk read up to five times before giving up and
+booting from the hard drive.
+
+    If you're running under OS/2, BOOT2C can actually redirect its boot-up
+instruction to another physical disk--drive D:, for example. Unfortunately,
+current releases of DOS don't support this feature, but in a future DOS
+version you may not have to be limited to booting from drive A: or C:.
+
+    The second utility, BOOTPW, a program that will password protect
+either a floppy or a hard disk.  Once protected, the disk won't be
+recognized as a valid disk by either DOS or OS/2.
+
+    You won't subsequently need the BOOTPW program to unprotect the disk.
+Just start the machine with the password-protected floppy disk in the
+A: drive, and the BOOTPW code will ask for the proper password.  Note
+that once the password is entered, the protection is removed; to reprotect
+the disk BOOTPW must be reinstalled.
+
+USING BOOT2C
+
+     BOOT2C is a simple program with a simple interface.  Its full syntax is
+
+                                 BOOT2C d: [n]
+ 
+where d: is the disk drive on which the redirection code is to be installed
+and the optional n parameter (to be explained below) is the number of the
+disk that holds the boot-up files (OS/2 only).  For the normal case,
+assuming that the BOOT2C.COM program is on your path, you can install
+the necessary code on the floppy disk in the A: drive by entering
+
+                                  BOOT2C A:
+
+You can then leave the floppy disk in drive A:, and you'll never have to
+see that irritating ``Non-System disk'' error message again.
+
+    The redirection code written by BOOT2C is not a file you'll find with
+the DIR command; it resides in the boot sector of the disk.  You can write
+the code to a floppy disk located in drive B: by entering
+
+                                  BOOT2C B:
+
+Obviously, since a PC can't boot from the B: drive, a modified disk in
+the B: drive won't force a hard disk boot.  Such a command is useful,
+however, if you want to prepare the disk in your drive B: for use in
+another machine's drive A:.  It might be,  for example, that you need
+to put BOOT2C on a 3.5-inch floppy disk and your 3.5-inch drive is
+drive B:.
+
+    By using the n parameter, BOOT2C can also modify a floppy disk so it
+will boot the second hard disk of the system.  By the ``second hard disk''
+here I mean a second physical hard disk, not a secondary partition on the
+first hard disk.  Again, this will not work with current DOS, but OS/2
+users may wish to try it. To modify a floppy disk in the A: drive to boot
+the second hard disk, you use the command
+
+                                  BOOT2C A: 81
+
+    In the above command, 81 represents the physical disk number the BIOS
+uses to address the disk.  According to the BIOS numbering scheme, 0 is
+the first floppy disk, 1 is the second floppy disk, and so on.  Hard disks
+are numbered starting with 80 hex, so the first hard disk is 80, the second
+is 81.  Thus, to force a floppy disk in the A: drive to boot the disk in
+the B: drive on systems where the B: drive is bootable, the command is
+
+                                   BOOT2C A: 1
+
+    BOOT2C must use the BIOS number instead of the drive letter because
+at the point in the boot-up sequence at which the BOOT2C boot program is
+executed, the operating system isn't available to tell BOOT2C which
+physical drives it calls the A:, B:, and C: drives!  The drive letters
+with which we are familiar don't exist at the BIOS level when a PC is
+booted.
+
+    Once the new BOOT2C boot record has been installed, the floppy disk
+will act like any other.  Files can be read and written to the disk and
+programs executed from the disk.  The only difference occurs when you
+boot the system with a BOOT2C-modified floppy disk in the A: drive.
+In that case the floppy disk displays a message indicating that BOOT2C
+is present and then continues by booting the files on the hard disk.
+
+    Removing BOOT2C from a disk requires executing either the DOS SYS
+or FORMAT commands on the disk.  Although this may seem to be a drastic
+step to take just to remove a program, there really isn't a reason for
+removing BOOT2C unless you want to make the disk bootable.  The SYS
+command puts the DOS system files onto the disk and replaces the boot
+record--including any BOOT2C code.  FORMAT erases all information on the
+disk and writes a new DOS boot record.
+
+USING BOOTPW
+
+     Using BOOTPW is just as simple as BOOT2C.  Just type BOOTPW along
+with the drive letter of the disk to protect.  For example, to protect
+a floppy disk in the A: drive, you enter the command
+
+                                   BOOTPW A:
+ 
+    Once started, BOOTPW will ask you for a password.  The password, which
+can be up to eight characters long, is not displayed on the screen as you
+enter it.  BOOTPW then asks for the password again to ensure that you
+entered the password correctly.  The disk should then be removed from the
+drive.  If you now place the floppy disk in the drive again and try a DIR
+(or any other disk-related) command, DOS will respond with a ``General
+failure'' message.
+
+    The password protection can be removed in either of two ways.  First,
+if you run BOOTPW on a drive that is already password-protected, BOOTPW
+will ask you to enter in the password for the disk.  If you enter the
+proper password, BOOTPW will unprotect the disk, restoring it to its
+original state.
+
+    Since you might not always have BOOTPW available, a floppy disk can
+be unprotected by a second method.  Simply place the disk in the A: drive
+and reboot your machine.  Instead of booting the operating system, the
+disk will ask you for the password for the disk.  If you enter it correctly,
+the password protection will be removed and the disk will continue to boot
+as if it had never been protected.  That's to say, if the disk is not a
+bootable disk you'll get the standard Non-System disk error message.
+When this happens, all you need to do is remove the floppy disk and reboot
+your system.
+
+    How much actual protection does BOOTPW provide?  As with all password
+schemes, BOOTPW can be broken.  Its protection is at the operating system
+level; the data on the disk is not modified in any way, and an intrepid
+programmer can remove the password with a few hours' work.  So, using
+BOOTPW won't absolutely prevent people from reading your data, but it will
+deter them--at least for a while.
+
+REVEILLE
+
+    When a PC first wakes up or is reset, it goes through a built-in
+series of Power-On Self Tests (POST) designed to initialize the system
+components and ensure memory integrity.  Only after the machine has been
+tested and initialized does it look to the outside world for a program
+to run.  Normally, this first program is an operating system, such as
+DOS or OS/2. BOOTPW and BOOT2C are exceptions to the general rule, for
+they take control of the machine before DOS or OS/2.
+
+    To load its first program, the PC reads the first sector of the first
+floppy disk in the system and loads the information there at segment 0,
+offset 7C00 hex.  If the data in that sector contains the word value
+AA55 hex (known as the signature word) at offset 510 of the block, the
+sector is assumed to contain valid code and the BIOS jumps to the first
+byte of the block (address 0:7C00).  At this point, all the microprocessor
+registers are undefined with the exceptions of the following:  the code
+segment register (CS), which contains 0; the instruction pointer (IP),
+which contains 7C00 hex; and DL, which contains the number of the drive
+where the boot sector was found.
+
+    If the first floppy disk sector does not have the correct signature
+word--because there isn't a floppy disk in the drive or there isn't a
+drive at all--the BIOS attempts to load the first sector of the first
+hard disk in the system.  The process is the same as when reading the
+floppy disk:  The first sector is placed at address 0:7C00 and the
+signature word is checked.  If a valid signature is not found, the PC
+assumes that there isn't an external program to load.  In this case,
+an IBM PC will start its ROM BASIC program.  Machines that lack ROM
+BASIC simply wait for the user to place a proper floppy disk in the
+system.
+
+    The DOS boot sector has two components that are vital to DOS and
+OS/2 FAT drives. The first component is the BIOS Parameter Block (BPB),
+which is located immediately following a Jump opcode and the OEM
+identification field.  The figure below shows the layout of the first
+60 bytes of a DOS boot record.
+
+The DOS Boot Record
+
+Offset    Name             Size       Description
+---------------------------------------------------------------------------
+
+ 0      jump opcode        3 bytes     Long jump or short jump followed
+                                       by a NOP
+
+ 3      OEM field          8 bytes     Identifies the DOS that formatted
+                                       the disk
+
+**11    Bytes per sector   Word        Sector size in bytes
+
+**13    Sectors per        Byte        Number of sectors per allocation unit
+        cluster
+
+**14    Reserved Sectors    Word        Number of sectors reserved after the
+                                        boot record
+
+**16    Number of FATs      Byte        Number of file allocation tables
+                                        on-disk
+
+**17    Root entries        Word        Number of entries in the root
+                                        directory
+
+**19    Total sectors       Word        Total sectors on disk 0 if number over
+                                        65,535
+
+**21    Media descriptor    Byte        Indicates the type of media
+
+**22    Sectors per FAT     Word        Size in sectors of each FAT
+
+**24    Sectors per track   Word        Number of sectors on each track on
+                                        the disk
+
+**26    Number of heads     Word        Number of heads on-disk
+
+**28    *Hidden Sectors     Word        Number of hidden sectors on-disk 
+
+***32   Huge Sectors        DWord       Total sectors if over 65,535 
+
+***34   Drive number        Byte        BIOS drive number
+
+***35                       Byte        Reserved
+
+***36   Boot signature      Byte        Must be 29 hex for extended boot
+                                        record
+
+***37   Volume ID           DWord       Volume ID for disk
+
+***41   Volume label        11 bytes    Copy of volume label
+
+***52   File system label   8 bytes     Identifies file system type (FAT12
+                                        or FAT16)
+
+* In DOS 3.3 this field was extended to a double word.
+
+** BIOS Parameter Block
+
+*** Added in DOS 4
+
+Figure:  This table shows the layout of the data at the start of the first
+          60 bytes of a DOS boot record.
+-----------------------------------------------------------------------------
+
+
+    The second important part of a DOS boot record is the boot program
+itself, which finds and loads the DOS system files.  The boot program is
+a simple routine that uses the data in the BPB to locate the root
+directory on the disk.  The directory is then read into memory and its
+entries are checked for the two DOS system programs:  IO.SYS and
+MSDOS.SYS (for MS-DOS), or IBMBIO.COM and IBMDOS.COM (for PC-DOS).
+If these files are not in their proper place on the disk, the boot sector
+code prints its infamous ``Non-System disk or disk error'' message.
+
+    If these files are found, the boot routine reads the first few sectors
+of IO.SYS (or IBMBIO.COM) into memory and then jumps to the newly loaded
+code.  From that point on, the machine is controlled by the DOS system
+programs.  By using a slightly different boot program and loading the
+file OS2LDR instead, the machine will run OS/2 instead of DOS.  In the
+case of the programs BOOT2C and BOOTPW, the boot record takes a different
+path still.
+
+HOW BOOT2C AND BOOTPW WORK
+
+     Both BOOT2C and BOOTPW work by modifying the boot record on the
+target floppy disk.  Although both BOOT2C and BOOTPW contain code
+necessary for installation (and removal, in the case of BOOTPW), the
+replacement boot records of these programs are of primary interest.
+
+    When BOOT2C is run, it replaces the original boot record on the
+floppy disk with the BOOT2C boot record.  Before the BOOT2C boot record
+is written to the disk, the fields in the BIOS Parameter Block are filled
+in with the information from the original boot record.
+
+    The boot sector code is quite simple.  The first instruction is the
+required JMP opcode.  This is followed by an empty area that is filled in
+with the BIOS Parameter Block from the original boot record during the
+installation.  After the BPB comes the byte that holds the drive number
+toward which BOOT2C will redirect the boot.  The boot code that follows
+is relatively short and can be described straightforwardly.
+
+    First, the stack segment (SS) and stack pointer (SP) must be
+initialized.  Since the POST procedure initializes only the CS, IP, and
+DL registers, all the other registers must be initialized before they
+are used.  Once the registers are initialized, the boot code must be
+relocated, for the boot record that BOOT2C is to load must occupy the
+place that BOOT2C has taken over. BOOT2C therefore moves its own code up
+by 512 bytes, to address 0:7A00 hex, and then uses a far return to jump
+to the new location.  Once relocated, BOOT2C prints a short message to
+indicate where it is and then proceeds to read the boot sector on the
+redirection disk.
+
+    Since DOS has yet to be loaded, however, BOOT2C must use the BIOS
+disk services.  In order to read a sector via the BIOS, a program must
+encode the cylinder, head, and sector information in the CX and DX
+registers.  ES:BX points to the buffer for the data and AL is loaded
+with the number of sectors to be read.  Finally, AH is loaded with a 2
+to indicate a disk read, and an Interrupt 13h is performed.
+
+    Specifically to read the boot sector of the disk, the registers are
+loaded so that BX contains 7C00, CX is equal to 1, DH is 0, and register
+DL contains the disk number.
+
+    Following the procedure of the BIOS routine, BOOT2C checks to see
+whether the sector read has the proper AA55 boot flag located at offset
+510.  If not, or if an error occurred during the read, BOOT2C displays
+an error message and halts the machine.  If the boot record is valid,
+BOOT2C loads DL with the new boot drive number and jumps to the new
+boot code.
+
+    The boot code for BOOTPW performs a very similar litany, except
+extra code is added to query the user for the password.  The tasks of
+the BOOTPW boot record are to ensure that the user enters the proper
+password, then to find and read the original boot record, write the
+original boot record back to its proper place, and finally to reboot
+the machine.  Once the original boot record code has been rewritten
+to the boot sector, the reboot will cause the machine to continue the
+boot process as if BOOTPW had never existed.  Of course, if there are
+no system files on the floppy disk, the reboot of the original boot
+record will display the ``Non-System disk'' message.
+
+    The protection provided to the disk is actually quite simple.
+The BOOTPW boot record does not conform to the DOS requirement for a
+BIOS Parameter Block located at the start of the disk.  Thus, when DOS
+attempts to read the protected disk, it does not see a proper BPB and
+consequently reports a General Error back to the user.  Until the
+correct boot sector is replaced, DOS is not able to access the disk.
+
+    BOOTPW can also unprotect a disk without requiring a machine reboot.
+To do this the BOOTPW program reads and writes the protected disk with
+DOS interrupt 25 (Absolute Sector Read) and DOS interrupt 26
+(Absolute Sector Write).  These functions can read the boot record of
+a protected disk even with a BOOTPW boot record installed.
+
+    Both BOOTPW and BOOT2C show what can be done with no more than the
+limited 512 bytes of a boot record.  By modifying the boot record
+structure, BOOTPW confuses DOS so that the disk becomes inaccessible.
+On the other hand, BOOT2C's almost trivial code frees us from the
+frustration of that silly ``Non-System or disk error'' message.  If you
+use a lot of floppy disks, you'll rejoice that the full use of your
+A: drive has been returned to you.
+------------------------------------------------------------------------
+
+DOUGLAS BOLING IS A CONTRIBUTING EDITOR TO PC MAGAZINE.
+
